@@ -64,8 +64,10 @@ antlr4GenListener in Antlr4 := false
 antlr4GenVisitor in Antlr4 := true
 
 publishTo := Some(
-  if (isSnapshot.value)
+  if (isSnapshot.value){
     Opts.resolver.sonatypeSnapshots
-  else
+  }
+  else{
     Opts.resolver.sonatypeStaging
+  }
 )
