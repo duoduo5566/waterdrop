@@ -7,7 +7,7 @@ import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.dstream.DStream
 
-class Socket(var config: Config) extends BaseInput(config) {
+abstract class Socket(var config: Config) extends BaseInput(config) {
 
   override def checkConfig(): (Boolean, String) = (true, "")
 

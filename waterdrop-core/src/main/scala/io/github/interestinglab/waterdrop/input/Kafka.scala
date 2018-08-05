@@ -14,7 +14,7 @@ import io.github.interestinglab.waterdrop.apis.BaseInput
 
 import scala.collection.JavaConversions._
 
-class Kafka(config: Config) extends BaseInput(config) {
+abstract class Kafka(config: Config) extends BaseInput(config) {
 
   // kafka consumer configuration : http://kafka.apache.org/documentation.html#oldconsumerconfigs
   val consumerPrefix = "consumer"

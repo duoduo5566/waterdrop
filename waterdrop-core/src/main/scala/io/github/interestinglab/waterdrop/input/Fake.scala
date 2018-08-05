@@ -5,6 +5,8 @@ import java.util
 
 import com.typesafe.config.{Config, ConfigFactory}
 import io.github.interestinglab.waterdrop.apis.BaseInput
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.streaming.StreamingContext
@@ -81,6 +83,14 @@ class Fake(var config: Config) extends BaseInput(config) {
 
     val receiverInputDStream = ssc.receiverStream(new FakeReceiver(config))
     receiverInputDStream.map(s => { ("", s) })
+  }
+
+  /**
+   * No matter what kind of Input it is, all you have to do is create a DStream to be used latter
+   * */
+  override def getRDD(sc: SparkContext): RDD[(String, String)] = {
+    val data = Array(("", "One"), ("", "Two"), ("", "Three"), ("", "Four"), ("", "Five"))
+    sc.parallelize(data)
   }
 }
 

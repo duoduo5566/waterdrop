@@ -2,6 +2,8 @@ package io.github.interestinglab.waterdrop.input
 
 import com.typesafe.config.Config
 import io.github.interestinglab.waterdrop.apis.BaseInput
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.dstream.DStream
 
@@ -36,5 +38,19 @@ class File(config: Config) extends BaseInput(config) {
     }
 
     ssc.textFileStream(fullPath).map(s => { ("", s) })
+  }
+
+  /**
+   * No matter what kind of Input it is, all you have to do is create a DStream to be used latter
+   * */
+  override def getRDD(sc: SparkContext): RDD[(String, String)] = {
+    val dir = config.getString("path")
+    val path = new org.apache.hadoop.fs.Path(dir)
+    val fullPath = Option(path.toUri.getScheme) match {
+      case None => ("file://" + dir)
+      case Some(schema) => dir
+    }
+
+    sc.textFile(fullPath).map(s => { ("", s) })
   }
 }

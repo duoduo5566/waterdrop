@@ -2,6 +2,8 @@ package io.github.interestinglab.waterdrop.input
 
 import com.typesafe.config.Config
 import io.github.interestinglab.waterdrop.apis.BaseInput
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.dstream.DStream
 
@@ -29,5 +31,12 @@ class Hdfs(config: Config) extends BaseInput(config) {
   override def getDStream(ssc: StreamingContext): DStream[(String, String)] = {
 
     ssc.textFileStream(config.getString("path")).map(s => { ("", s) })
+  }
+
+  /**
+   * No matter what kind of Input it is, all you have to do is create a DStream to be used latter
+   * */
+  override def getRDD(sc: SparkContext): RDD[(String, String)] = {
+    sc.textFile(config.getString("path")).map(s => { ("", s) })
   }
 }

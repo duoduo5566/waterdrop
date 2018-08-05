@@ -1,9 +1,10 @@
 package io.github.interestinglab.waterdrop.apis
 
 import com.typesafe.config.Config
+import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.streaming.dstream.DStream
-
 
 abstract class BaseInput(initConfig: Config) extends Plugin {
 
@@ -11,6 +12,11 @@ abstract class BaseInput(initConfig: Config) extends Plugin {
    * No matter what kind of Input it is, all you have to do is create a DStream to be used latter
    * */
   def getDStream(ssc: StreamingContext): DStream[(String, String)]
+
+  /**
+   * No matter what kind of Input it is, all you have to do is create a DStream to be used latter
+   * */
+  def getRDD(sc: SparkContext): RDD[(String, String)]
 
   /**
    * Things to do after filter and before output
