@@ -3,6 +3,7 @@ package io.github.interestinglab.waterdrop.filter
 import com.typesafe.config.{Config, ConfigFactory}
 import io.github.interestinglab.waterdrop.apis.BaseFilter
 import io.github.interestinglab.waterdrop.core.RowConstant
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.functions._
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.streaming.StreamingContext
@@ -77,5 +78,20 @@ class Split(var conf: Config) extends BaseFilter(conf) {
       case -1 => parts.slice(0, fillLength)
     }
     filled.toSeq
+  }
+
+  /**
+   * Prepare before running, do things like set config default value, add broadcast variable, accumulator.
+   */
+  override def prepare(spark: SparkSession): Unit = {
+    val defaultConfig = ConfigFactory.parseMap(
+      Map(
+        "delimiter" -> " ",
+        "source_field" -> "raw_message",
+        "target_field" -> RowConstant.ROOT
+      )
+    )
+
+    conf = conf.withFallback(defaultConfig)
   }
 }

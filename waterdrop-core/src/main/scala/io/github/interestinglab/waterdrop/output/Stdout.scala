@@ -2,6 +2,8 @@ package io.github.interestinglab.waterdrop.output
 
 import com.typesafe.config.{Config, ConfigFactory}
 import io.github.interestinglab.waterdrop.apis.BaseOutput
+import io.github.interestinglab.waterdrop.core.RowConstant
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import org.apache.spark.streaming.StreamingContext
 
@@ -25,6 +27,22 @@ class Stdout(var config: Config) extends BaseOutput(config) {
         "serializer" -> "plain" // plain | json
       )
     )
+    config = config.withFallback(defaultConfig)
+  }
+
+  /**
+   * Prepare before running, do things like set config default value, add broadcast variable, accumulator.
+   */
+  override def prepare(spark: SparkSession): Unit = {
+    super.prepare(spark)
+
+    val defaultConfig = ConfigFactory.parseMap(
+      Map(
+        "limit" -> 100,
+        "serializer" -> "plain" // plain | json
+      )
+    )
+
     config = config.withFallback(defaultConfig)
   }
 

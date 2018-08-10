@@ -1,7 +1,7 @@
 spark {
   # Waterdrop defined streaming batch duration in seconds
   spark.streaming.batchDuration = 5
-
+  spark.master= "local[2]"
   # see available properties defined by spark: https://spark.apache.org/docs/latest/configuration.html#available-properties
   spark.app.name = "Waterdrop"
   spark.executor.instances = 2

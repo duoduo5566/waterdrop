@@ -1,5 +1,6 @@
 package io.github.interestinglab.waterdrop.apis
 
+import org.apache.spark.SparkContext
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.streaming.StreamingContext
@@ -23,4 +24,9 @@ abstract class Plugin extends Serializable with Logging {
    * Prepare before running, do things like set config default value, add broadcast variable, accumulator.
    */
   def prepare(spark: SparkSession, ssc: StreamingContext): Unit = {}
+
+  /**
+   * Prepare before running, do things like set config default value, add broadcast variable, accumulator.
+   */
+  def prepare(spark: SparkSession): Unit = {}
 }
